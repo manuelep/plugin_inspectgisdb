@@ -1,0 +1,30 @@
+{{extend 'layout.html'}}
+<h1>{{=T("Table founded in db: %s") % odb}}</h1>
+{{#=BEAUTIFY(response._vars)}}
+
+<div class="panel panel-info">
+    <div class="panel-heading"><h3 class="panel-title">
+        {{=odb}}
+    </h3></div>
+    <ul class="list-group">
+        {{for tabinfo in tabinfos:}}
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col-md-3">
+                        <a href="{{=URL(request.controller, 'table', args=(odb, tabinfo.table_name,))}}">{{=tabinfo.table_name}}</a>
+                    </div>
+                    <div class="col-md-3">
+                        {{=tabinfo.geometry_column}}
+                    </div>
+                    <div class="col-md-3">
+                        {{=tabinfo.srid}}
+                    </div>
+                    <div class="col-md-3">
+                        {{=tabinfo.gtype}} ({{=tabinfo.dim}}D)
+                    </div>
+                </div>
+                {{#=A(tablename, _href=URL('plugin_inspectdb', 'table', args=(odb, tablename,)))}}
+            </li>
+        {{pass}}
+    </u>
+</div>

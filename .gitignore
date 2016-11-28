@@ -1,0 +1,12 @@
+# Ignore everything
+*
+
+# But not these files...
+!.gitignore
+!plugin_inspectgisdb*
+!plugin_inspectgisdb/*
+
+# ...even if they are in subdirectories
+!*/
+
+*.pyc

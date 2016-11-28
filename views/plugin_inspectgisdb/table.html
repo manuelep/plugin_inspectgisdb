@@ -1,0 +1,23 @@
+{{extend 'layout.html'}}
+
+<h1>{{=" / ".join(request.args[:2])}}</h1>
+{{for col in envs:}}
+    {{=LOAD("default", "call", args=("run", "getmap", request.args(0), request.args(1), col,), vars=dict(), ajax=True, target="map-%s" % col)}}
+{{pass}}
+
+{{foo = lambda s: s[s.find("(")+2:s.find(")")].split(",")}}
+{{for col,row in envs.items():}}
+<div class="row">
+    <div class="row">
+        <div class="col-md-12"><strong>{{=col}}</strong></div>
+    </div>
+    <div class="row">
+    {{if row._extra.values()[0]:}}
+        {{for coord in foo(row._extra.values()[0])[:-1]:}}
+        <div class="col-md-3">{{=coord}}</div>
+        {{pass}}
+    {{pass}}
+    </div>
+</div>
+{{pass}}
+{{=LOAD("plugin_inspectdb", "table.load", args=(odb, tablename,), ajax=True, target="grid-%s" % tablename)}}
