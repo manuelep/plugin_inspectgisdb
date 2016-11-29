@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 
-from dal import Table
+
 import geojson, json, pyproj
 import shapely.wkt
 from dal import Expression
-# from gluon.dal import geoPolygon
 if not "jsmin" in vars():
     from jsmin import jsmin
 from dal import geoPoint, geoLine, geoPolygon
-from plugin_inspectdb import loopOconns
 
 def _plugin_inspectgisdb():
 
+    from dal import Table
     from gluon.tools import PluginManager
     plugins = PluginManager('inspectgisdb')
 
@@ -32,14 +31,6 @@ def _plugin_inspectgisdb():
             yield conn
 
 GISConns = list(_plugin_inspectgisdb())
-
-
-
-
-# GISConns = [kv for kv in loopOconns() if kv[1].get("gis")]
-# for conn, _ in GISConns:
-#     odbs[conn].define_table("geometry_columns", geometry_columns)
-
 
 response.menu += [
     (STRONG(SPAN(_class="glyphicon glyphicon-plane", **{"_aria-hidden": "true"}),
@@ -98,7 +89,7 @@ def geom(conn, tablename, the_geom="geom", epsg=3857, bbox=None, **kw):
 
     if not bbox is None:
         a, b, c, d = map(float, bbox.split(','))
-        query &= Expression(db, "%(tablename)s.geom && ST_MakeEnvelope(%(a)s, %(b)s, %(c)s, %(d)s, %(srid)s)" % locals())
+        query &= Expression(db, "%(tablename)s.geom && ST_MakeEnvelope(%(a)s, %(b)s, %(c)s, %(d)s, %(srid)s)" % vars())
 
     res = odb(query).select(
         #limitby=(0,10,),
@@ -197,16 +188,6 @@ var map = new ol.Map({
     """
     response.js = jsmin(js)
     return DIV(_id="map", _style="height: 500px;")
-
-for url in [
-#     "https://cdnjs.cloudflare.com/ajax/libs/ol3/3.15.1/ol-debug.css",
-#     "https://cdnjs.cloudflare.com/ajax/libs/ol3/3.15.1/ol-debug.js",
-#     "https://cdnjs.cloudflare.com/ajax/libs/ol3/3.15.1/ol.css",
-#     "https://cdnjs.cloudflare.com/ajax/libs/ol3/3.15.1/ol.js"
-    URL("static", "libs/ol-v3.15.1-dist/ol.css"),
-    URL("static", "libs/ol-v3.15.1-dist/ol-debug.js"),
-]:
-    response.files.append(url)
 
 class GDBService(DBService):
 
