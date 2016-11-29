@@ -39,7 +39,8 @@ response.menu += [
                     for conn in GISConns],),
 ]
 
-def getGeomProps(tablename, epsg=None):
+def getGeomProps(dbname, tablename, epsg=None):
+    odb = odbs[dbname]
     foo = lambda s: s[s.find("(")+2:s.find(")")].split(",")
     geoms = odb(odb.geometry_columns.table_name==tablename).select(
         odb.geometry_columns.table_name,
@@ -223,7 +224,7 @@ class GDBService(DBService):
             data = geojson.loads(_data) if isinstance(_data, basestring) else _data
             properties = data.pop("properties")
 
-            tabprops = getGeomProps(tablename)
+            tabprops = getGeomProps(dbname, tablename)
             tab = odbs[dbname][tablename]
             odata = {k: cls._cast(tab[k], v) for k,v in properties.iteritems()}
 

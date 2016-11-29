@@ -5,6 +5,7 @@
 !.gitignore
 !plugin_inspectgisdb*
 !plugin_inspectgisdb/*
+!views/plugin_inspectgisdb/*
 
 # ...even if they are in subdirectories
 !*/
