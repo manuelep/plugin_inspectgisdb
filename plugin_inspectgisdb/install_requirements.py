@@ -3,10 +3,16 @@
 from gluon._compat import urlopen
 from gluon.admin import plugin_install
 
-requirements = {
-    "inspectdb": "https://github.com/manuelep/plugin_inspectdb/releases/download/v1.0/web2py.plugin.inspectdb.w2p"
-}
+def install_plugins(**urls):
+    """ Installs required plugins from urls """
+    for name, url in urls.items():
+        plugin_install(current.request.application, urlopen(url), current.request, "web2py.plugin.%s.w2p" % name)
+        print "Required plugin %s installed successfully!" % name
 
 if __name__=="__main__":
-    for name, url in requirements.items():
-        plugin_install(request.application, urlopen(url), request, "web2py.plugin.%s.w2p" % name)
+
+    requirements = {
+        "inspectdb": "https://github.com/manuelep/plugin_inspectdb/releases/download/v1.0/web2py.plugin.inspectdb.w2p"
+    }
+    
+    install_plugins(**requirements)
