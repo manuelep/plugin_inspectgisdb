@@ -6,7 +6,7 @@ from gluon.admin import plugin_install
 def install_plugins(**urls):
     """ Installs required plugins from urls """
     for name, url in urls.items():
-        plugin_install(current.request.application, urlopen(url), current.request, "web2py.plugin.%s.w2p" % name)
+        plugin_install(request.application, urlopen(url), request, "web2py.plugin.%s.w2p" % name)
         print "Required plugin %s installed successfully!" % name
 
 if __name__=="__main__":
