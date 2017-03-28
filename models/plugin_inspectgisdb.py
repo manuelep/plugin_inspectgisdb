@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
 import geojson, json, pyproj
 import shapely.wkt
 from dal import Expression
@@ -33,6 +32,7 @@ def _plugin_inspectgisdb():
 GISConns = list(_plugin_inspectgisdb())
 
 if plugin_inspectdb_tables_access:
+
     response.menu += [
         (STRONG(SPAN(_class="glyphicon glyphicon-plane", **{"_aria-hidden": "true"}),
                 " ", T("Inspect dbs"), _style="color: yellow;"), False, "#", [
@@ -219,7 +219,7 @@ class GDBService(DBService):
         data @string/geojson : Data in geojson format. Properties will be distributed in fields using keys.
         """
 
-        @auth.requires(request.is_local or auth.is_logged_in())
+        @auth.requires(request.is_local or auth.is_logged_in(), requires_login=False)
         def _main():
             session.forget(response)
             data = geojson.loads(_data) if isinstance(_data, basestring) else _data
@@ -237,7 +237,6 @@ class GDBService(DBService):
     def bulk_insert(cls, dbname, tablename, _data):
         data = geojson.loads(_data) if isinstance(_data, basestring) else _data
         return map(lambda d: cls.insert(dbname, tablename, d), data)
-            
 
 @service.json
 def gdb_insert(dbname, tablename, data):
