@@ -32,12 +32,13 @@ def _plugin_inspectgisdb():
 
 GISConns = list(_plugin_inspectgisdb())
 
-response.menu += [
-    (STRONG(SPAN(_class="glyphicon glyphicon-plane", **{"_aria-hidden": "true"}),
-            " ", T("Inspect dbs"), _style="color: yellow;"), False, "#", [
-                (conn, False, URL("plugin_inspectgisdb", "index", args=(conn,)),) \
-                    for conn in GISConns],),
-]
+if plugin_inspectdb_tables_access:
+    response.menu += [
+        (STRONG(SPAN(_class="glyphicon glyphicon-plane", **{"_aria-hidden": "true"}),
+                " ", T("Inspect dbs"), _style="color: yellow;"), False, "#", [
+                    (conn, False, URL("plugin_inspectgisdb", "index", args=(conn,)),) \
+                        for conn in GISConns],),
+    ]
 
 def getGeomProps(dbname, tablename, epsg=None):
     odb = odbs[dbname]
